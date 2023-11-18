@@ -1,118 +1,63 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import React, { useState } from 'react';
+import { SafeAreaView, ScrollView } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { VideoCard, YouTubeReanimated } from './src/components';
+import { IVideoCardProps } from './src/types/Types';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+const DATA: IVideoCardProps[] = [
+  {
+    id: 1,
+    channelLogo: 'https://i.pravatar.cc/150?img=32',
+    thumbnail: 'https://picsum.photos/720/480?random=1',
+    title: 'Exploring the Majestic Mountains of Switzerland',
+    channelTitle: 'Nature Explorer   500k views  1 month ago',
+    channelName: 'Nature Explorer',
+  },
+  {
+    id: 2,
+    channelLogo: 'https://i.pravatar.cc/150?img=33',
+    thumbnail: 'https://picsum.photos/720/480?random=2',
+    title: "A Culinary Journey Through Italy's Best Eateries",
+    channelTitle: 'Foodie Adventures   250k views  2 weeks ago',
+    channelName: 'Foodie Adventures',
+  },
+  {
+    id: 3,
+    channelLogo: 'https://i.pravatar.cc/150?img=34',
+    thumbnail: 'https://picsum.photos/720/480?random=3',
+    title: 'Discovering the Hidden Gems of Tokyo',
+    channelTitle: 'Urban Explorer   800k views  3 months ago',
+    channelName: 'Urban Explorer',
+  },
+  {
+    id: 4,
+    channelLogo: 'https://i.pravatar.cc/150?img=35',
+    thumbnail: 'https://picsum.photos/720/480?random=4',
+    title: 'Top 10 Beaches to Visit in the Caribbean',
+    channelTitle: 'Travel Paradise   1m views  6 months ago',
+    channelName: 'Travel Paradise',
+  },
+];
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+type ISelectedVideoProps = IVideoCardProps | null;
 
-function Section({children, title}: SectionProps): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+const App = () => {
+  const [selectedVideo, setSelectedVideo] = useState<ISelectedVideoProps>(null);
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
-
-function App(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+      <GestureHandlerRootView>
+        <ScrollView>
+          {DATA?.map((item) => (
+            <VideoCard key={item.id} data={item} setSelectedVideo={setSelectedVideo} />
+          ))}
+        </ScrollView>
+        {selectedVideo && (
+          <YouTubeReanimated selectedVideo={selectedVideo} onClose={() => setSelectedVideo(null)} />
+        )}
+      </GestureHandlerRootView>
     </SafeAreaView>
   );
-}
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
+};
 
 export default App;
